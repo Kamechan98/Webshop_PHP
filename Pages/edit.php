@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->title = $_POST['title'];
     $product->stockLevel = $_POST['stockLevel'];
     $product->price = $_POST['price'];
+    $product->imgUrl = $_POST['imgUrl'];
     $product->categoryName = $_POST['categoryName'];
     $dbContext->updateProduct($product);
     echo "<h1>Produkten har uppdaterats</h1>";
@@ -66,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
                             }
                             ?>
-                            <li><a class="dropdown-item" href="#!">En cat</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
@@ -95,6 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-group">
                     <label for="price">Price</label>
                     <input type="text" class="form-control" name="price" value="<?php echo $product->price ?>">
+                </div>
+                <div class="form-group">
+                    <label for="imgUrl">ImgUrl</label>
+                    <input type="text" class="form-control" name="imgUrl" value=<?php echo $product->imgUrl ?>>
                 </div>
                 <div class="form-group">
                     <label for="stockLevel">Stock</label>

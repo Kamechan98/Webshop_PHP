@@ -18,7 +18,7 @@ $router->addRoute('/', function () {
 $router->addRoute('/category', function () {
     require __DIR__ . '/Pages/category.php';
 });
-$router->addRoute('/admin/admin', function () {
+$router->addRoute('/admin/products', function () {
     require __DIR__ . '/Pages/admin.php';
 });
 $router->addRoute('/admin/edit', function () {
@@ -29,6 +29,9 @@ $router->addRoute('/admin/new', function () {
 });
 $router->addRoute('/admin/delete', function () {
     require __DIR__ . '/Pages/delete.php';
+});
+$router->addRoute('/search', function () {
+    require_once(__DIR__ . '/Pages/search.php');
 });
 
 $router->dispatch();

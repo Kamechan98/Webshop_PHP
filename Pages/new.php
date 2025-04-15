@@ -9,13 +9,13 @@ $dbContext = new Database();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Här kommer vi när man har tryckt  på SUBMIT
-    // IMORGON TISDAG SÅ UPDATE PRODUCT SET title = $_POST['title'] WHERE id = $id
     $title = $_POST['title'];
     $stockLevel = $_POST['stockLevel'];
     $price = $_POST['price'];
+    $imgUrl = $_POST['imgUrl'];
     $categoryName = $_POST['categoryName'];
-    $dbContext->insertProduct($title, $stockLevel, $price, $categoryName);
-    header("Location: /admin/admin");
+    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName);
+    header("Location: /admin/products");
     exit;
 } else {
     // Det är INTE ett formulär som har postats - utan man har klickat in på länk tex edit.php?id=12
@@ -92,12 +92,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" class="form-control" name="title" value="">
                 </div>
                 <div class="form-group">
+                    <label for="stockLevel">Stock</label>
+                    <input type="text" class="form-control" name="stockLevel" value="">
+                </div>
+                <div class="form-group">
                     <label for="price">Price</label>
                     <input type="text" class="form-control" name="price" value="">
                 </div>
                 <div class="form-group">
-                    <label for="stockLevel">Stock</label>
-                    <input type="text" class="form-control" name="stockLevel" value="">
+                    <label for="imgUrl">ImgUrl</label>
+                    <input type="text" class="form-control" name="imgUrl" value="">
                 </div>
                 <div class="form-group">
                     <label for="categpryName">Category name:</label>

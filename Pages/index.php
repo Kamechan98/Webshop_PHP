@@ -34,7 +34,7 @@ $dbContext = new Database();
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kategorier</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/category">All Products</a></li>
+                                <li><a class="dropdown-item" href="/">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
                                     foreach($dbContext->getAllCategories() as $cat){
@@ -79,7 +79,7 @@ $dbContext = new Database();
                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
                                 <?php } ?>        
                                 <!-- Product image-->
-                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <img class="card-img-top" src="<?php echo $prod->imgUrl; ?>" alt="..." />
                                 <!-- Product details-->
                                 <div class="card-body p-4">
                                     <div class="text-center">
