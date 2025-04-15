@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = $_POST['price'];
     $imgUrl = $_POST['imgUrl'];
     $categoryName = $_POST['categoryName'];
-    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName);
+    $popularityFactor = $_POST['popularityFactor'];
+    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor);
     header("Location: /admin/products");
     exit;
 } else {
@@ -106,6 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-group">
                     <label for="categpryName">Category name:</label>
                     <input type="text" class="form-control" name="categoryName" value="">
+                </div>
+                <div class="form-group">
+                    <label for="popularityFactor">Popularity factor</label>
+                    <input type="number" class="form-control" name="popularityFactor" value="">
                 </div>
                 <input type="submit" class="btn btn-primary" value="Skapa">
             </form>

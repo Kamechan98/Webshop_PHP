@@ -50,11 +50,16 @@ $sortOrder = $_GET['sortOrder'] ?? "";
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Kategorier</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">All Products</a></li>
+                            <li><a class="dropdown-item" href="/">All Products</a></li>
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
-                            <li><a class="dropdown-item" href="#!">En cat</a></li>
+                            <?php
+                            foreach ($dbContext->getAllCategories() as $cat) {
+                                echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
+                            }
+                            ?>
+
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>

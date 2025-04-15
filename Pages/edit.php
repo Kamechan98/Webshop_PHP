@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->price = $_POST['price'];
     $product->imgUrl = $_POST['imgUrl'];
     $product->categoryName = $_POST['categoryName'];
+    $product->popularityFactor = $_POST['popularityFactor'];
     $dbContext->updateProduct($product);
     echo "<h1>Produkten har uppdaterats</h1>";
 } else {
@@ -109,6 +110,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="categpryName">Category name:</label>
                     <input type="text" class="form-control" name="categoryName"
                         value="<?php echo $product->categoryName ?>">
+                </div>
+                <div class="form-group">
+                    <label for="popularityFactor">Popularity factor</label>
+                    <input type="number" class="form-control" name="popularityFactor"
+                        value="<?php echo $product->popularityFactor ?>">
                 </div>
                 <input type="submit" class="btn btn-primary" value="Uppdatera">
             </form>
