@@ -5,6 +5,7 @@ class Product
     public $id;
     public $title;
     public $price;
+    public $productDescription;
     public $imgUrl;
     public $stockLevel;
     public $categoryName;

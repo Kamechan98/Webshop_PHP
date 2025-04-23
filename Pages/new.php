@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imgUrl = $_POST['imgUrl'];
     $categoryName = $_POST['categoryName'];
     $popularityFactor = $_POST['popularityFactor'];
-    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor);
+    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor, $description);
     header("Location: /admin/products");
     exit;
 } else {

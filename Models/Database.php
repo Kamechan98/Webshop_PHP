@@ -43,40 +43,39 @@ class Database
         $this->usersDatabase->seedUsers();
     }
 
-    function addProductIfNotExists($title, $price, $stockLevel, $imgUrl, $categoryName, $popularityFactor)
+    function addProductIfNotExists($title, $price, $stockLevel, $imgUrl, $categoryName, $popularityFactor, $productDescription)
     {
         $query = $this->pdo->prepare("SELECT * FROM Products WHERE title = :title");
         $query->execute(['title' => $title]);
         if ($query->rowCount() == 0) {
-            $this->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor);
+            $this->insertProduct($title, $price, $imgUrl, $stockLevel, $categoryName, $popularityFactor, $productDescription);
         }
     }
 
 
     function initData()
     {
-        $this->addProductIfNotExists(title: "Lord of the Rings", price: 300, imgUrl: "https://th.bing.com/th/id/OIP.TpPI9Xo84FEIODUn2tjjdgHaLK?rs=1&pid=ImgDetMain", stockLevel: 100, categoryName: "Books", popularityFactor: 10);
-        $this->addProductIfNotExists(title: "Song of Achilles", price: 170, imgUrl: "https://litbooks.com.my/wp-content/uploads/2021/07/919UVPXfX9L.jpg", stockLevel: 50, categoryName: "Books", popularityFactor: 8);
-        $this->addProductIfNotExists(title: "The Hobbit", price: 200, imgUrl: "https://th.bing.com/th/id/OIP.MkXExfs8B8Luo5Vapfko3AHaLX?rs=1&pid=ImgDetMain", stockLevel: 70, categoryName: "Books ", popularityFactor: 8);
-        $this->addProductIfNotExists(title: "The Iliad", price: 250, imgUrl: "https://th.bing.com/th/id/OIP.l1IiTu3LHwkFjhlLpM9a3gHaLQ?rs=1&pid=ImgDetMain", stockLevel: 30, categoryName: "Books", popularityFactor: 6);
-        $this->addProductIfNotExists(title: "The Odyssey", price: 250, imgUrl: "https://m.media-amazon.com/images/I/71auePo1a8L.jpg", stockLevel: 40, categoryName: "Books", popularityFactor: 6);
-        $this->addProductIfNotExists(title: "Percy Jackson", price: 500, imgUrl: "https://th.bing.com/th/id/OIP.hlKk62Oln29Kvt6dTmEHFAHaLO?rs=1&pid=ImgDetMain", stockLevel: 20, categoryName: "Books", popularityFactor: 5);
-        $this->addProductIfNotExists(title: "Mythos", price: 150, imgUrl: "https://th.bing.com/th/id/OIP.eQBsGwoYctz-gA6yvIVQaQAAAA?rs=1&pid=ImgDetMain", stockLevel: 180, categoryName: "Books", popularityFactor: 4);
-        $this->addProductIfNotExists(title: "Lord of the Rings", price: 300, imgUrl: "https://th.bing.com/th/id/OIP.VM3rE1rkPsfSnlaURqf5kwHaKg?rs=1&pid=ImgDetMain", stockLevel: 70, categoryName: "Movies", popularityFactor: 10);
-        $this->addProductIfNotExists(title: "Wicked", price: 150, imgUrl: "https://cdn.kinocheck.com/i/8mxyyhborj.jpg", stockLevel: 180, categoryName: "Movies", popularityFactor: 9);
-        $this->addProductIfNotExists(title: "The Wizard of Oz", price: 130, imgUrl: "https://th.bing.com/th/id/OIP._Vw5JqbqkQrfYhcQPaNXAwHaK9?w=205&h=304&c=7&r=0&o=5&dpr=1.3&pid=1.7", stockLevel: 40, categoryName: "Movies", popularityFactor: 5);
-        $this->addProductIfNotExists(title: "Into the Spiderverse", price: 120, imgUrl: "https://th.bing.com/th/id/OIP.u-03iGf1uJsiFRsKgd9_cgHaLH?rs=1&pid=ImgDetMain", stockLevel: 20, categoryName: "Movies", popularityFactor: 9);
-        $this->addProductIfNotExists(title: "Iron Man", price: 110, imgUrl: "https://posterspy.com/wp-content/uploads/2021/03/Iron_Man-200th_Poster.jpg", stockLevel: 50, categoryName: "Movies", popularityFactor: 9);
-        $this->addProductIfNotExists(title: "Hairspray", price: 100, imgUrl: "https://i0.wp.com/www.needcoffee.com/wp-content/uploads/2007/07/hairspray-movie-poster.jpg?w=550", stockLevel: 70, categoryName: "Movies", popularityFactor: 7);
-        $this->addProductIfNotExists(title: "Cabaret", price: 130, imgUrl: "https://th.bing.com/th/id/OIP.ekDrOETMHeCVPNRNEtPKTwHaKe?rs=1&pid=ImgDetMain", stockLevel: 30, categoryName: "Movies", popularityFactor: 4);
-        $this->addProductIfNotExists(title: "Our Flag Means Death", price: 200, imgUrl: "https://th.bing.com/th/id/OIP.t3P5S8gVlfA3n7kgO0Tm9wHaK9?rs=1&pid=ImgDetMain", stockLevel: 20, categoryName: "TV Show", popularityFactor: 9);
-        $this->addProductIfNotExists(title: "Good Omens", price: 300, imgUrl: "https://wallpapers.com/images/hd/good-omens-2019-tv-series-5tvntvsq4x5t6gwi.jpg", stockLevel: 30, categoryName: "TV Show", popularityFactor: 9);
-        $this->addProductIfNotExists(title: "Hazbin Hotel", price: 200, imgUrl: "https://th.bing.com/th/id/OIP.n_oyCAQ42EWZHKYFGZDnggHaLH?rs=1&pid=ImgDetMain", stockLevel: 30, categoryName: "TV Show", popularityFactor: 8);
-        $this->addProductIfNotExists(title: "Kaos", price: 130, imgUrl: "https://th.bing.com/th/id/R.d256666167cbfc00b5859b59a09e0f1a?rik=djVLw5XWmYKu0w&riu=http%3a%2f%2fwww.impawards.com%2fintl%2fuk%2ftv%2fposters%2fkaos_ver2_xlg.jpg&ehk=UPLZXVJ0OkQMSjwmLDxTzNtv2AeLt%2fsTcSJAC8vH8EM%3d&risl=&pid=ImgRaw&r=0", stockLevel: 10, categoryName: "TV Show", popularityFactor: 5);
-        $this->addProductIfNotExists(title: "Doctor Who", price: 180, imgUrl: "https://th.bing.com/th/id/OIP.odt1KN3OC8afezRc_pbcFAHaKX?rs=1&pid=ImgDetMain", stockLevel: 40, categoryName: "TV Show", popularityFactor: 9);
-        $this->addProductIfNotExists(title: "The World According to Jeff Goldblum", price: 200, imgUrl: "https://th.bing.com/th/id/R.b6280612cb729b279675cb455830437e?rik=78q2iQUf3is9Vw&riu=http%3a%2f%2fwww.impawards.com%2ftv%2fposters%2fworld_according_to_jeff_goldblum_ver2_xlg.jpg&ehk=clOlvSHNoxVqWZqNnwvKN8h7ApTJZSk1qa1KfPN095Q%3d&risl=&pid=ImgRaw&r=0", stockLevel: 30, categoryName: "TV Show", popularityFactor: 3);
-        $this->addProductIfNotExists(title: "What We Do In The Shadows", price: 300, imgUrl: "https://th.bing.com/th/id/R.632cb4f9cc771993b4cf9c77bdef6e4a?rik=G71Axe4D8aehQg&riu=http%3a%2f%2fwww.impawards.com%2ftv%2fposters%2fwhat_we_do_in_the_shadows_ver11.jpg&ehk=ARu6AFBHDFd%2ftqFv3Tf9siS1gAFkR1%2b3D12fFT3Yl2c%3d&risl=&pid=ImgRaw&r=0", stockLevel: 30, categoryName: "TV Show", popularityFactor: 5);
-
+        $this->addProductIfNotExists(title: "Lord of the Rings", price: 300, imgUrl: "https://th.bing.com/th/id/OIP.TpPI9Xo84FEIODUn2tjjdgHaLK?rs=1&pid=ImgDetMain", stockLevel: 100, categoryName: "Books", popularityFactor: 10, productDescription: "Följ Frodo och hans följeslagare på en episk resa genom Midgård för att förgöra den mörka härskarringens makt. Denna klassiska fantasytrilogi av J.R.R. Tolkien har trollbundit generationer med sin rika värld, djupa teman och oförglömliga karaktärer.");
+        $this->addProductIfNotExists(title: "Song of Achilles", price: 170, imgUrl: "https://litbooks.com.my/wp-content/uploads/2021/07/919UVPXfX9L.jpg", stockLevel: 50, categoryName: "Books", popularityFactor: 8, productDescription: "En gripande och hjärtskärande berättelse som återberättar Iliaden ur Patroklos perspektiv, och utforskar den djupa kärleken mellan honom och den legendariske hjälten Akilles. Madeline Miller ger de grekiska myterna en mänsklig röst som går rakt in i hjärtat.");
+        $this->addProductIfNotExists(title: "The Hobbit", price: 200, imgUrl: "https://th.bing.com/th/id/OIP.MkXExfs8B8Luo5Vapfko3AHaLX?rs=1&pid=ImgDetMain", stockLevel: 70, categoryName: "Books ", popularityFactor: 8, productDescription: "Innan Ringens Brödraskap började sin färd, fanns det Bilbo Baggins – en ovanlig hobbit på ett oväntat äventyr. Denna älskade berättelse blandar magi, drakar och mod på ett sätt som bara Tolkien kan.");
+        $this->addProductIfNotExists(title: "The Iliad", price: 250, imgUrl: "https://th.bing.com/th/id/OIP.l1IiTu3LHwkFjhlLpM9a3gHaLQ?rs=1&pid=ImgDetMain", stockLevel: 30, categoryName: "Books", popularityFactor: 6, productDescription: "Ett av litteraturens mest kända epos, där Homeros skildrar det trojanska kriget med starka teman om ära, vrede och mänsklig tragedi. En kraftfull och poetisk resa in i hjältarnas och gudarna värld.");
+        $this->addProductIfNotExists(title: "The Odyssey", price: 250, imgUrl: "https://m.media-amazon.com/images/I/71auePo1a8L.jpg", stockLevel: 40, categoryName: "Books", popularityFactor: 6, productDescription: "Odysseus färd hem efter det trojanska kriget blir en prövning som sträcker sig över årtionden. Monster, gudar och faror väntar – men också hopp, list och viljestyrka. Homeros odödliga verk är både äventyr och själsresa.");
+        $this->addProductIfNotExists(title: "Percy Jackson", price: 500, imgUrl: "https://th.bing.com/th/id/OIP.hlKk62Oln29Kvt6dTmEHFAHaLO?rs=1&pid=ImgDetMain", stockLevel: 20, categoryName: "Books", popularityFactor: 5, productDescription: "Rick Riordans moderna tolkning av grekisk mytologi följer Percy, en tonåring som upptäcker att han är en halvgud. Full av action, humor och hjärta – perfekt för unga läsare och mytfantaster.");
+        $this->addProductIfNotExists(title: "Mythos", price: 150, imgUrl: "https://th.bing.com/th/id/OIP.eQBsGwoYctz-gA6yvIVQaQAAAA?rs=1&pid=ImgDetMain", stockLevel: 180, categoryName: "Books", popularityFactor: 4, productDescription: "Stephen Fry återberättar de grekiska myterna med charm, humor och modern touch. En lättillgänglig och fängslande guide till gudar, hjältar och tragedier, perfekt för både nybörjare och veteraner.");
+        $this->addProductIfNotExists(title: "Lord of the Rings", price: 300, imgUrl: "https://th.bing.com/th/id/OIP.VM3rE1rkPsfSnlaURqf5kwHaKg?rs=1&pid=ImgDetMain", stockLevel: 70, categoryName: "Movies", popularityFactor: 10, productDescription: "Peter Jacksons mästerliga filmatisering av Tolkiens verk, med storslagen cinematografi, ikoniska scener och oförglömliga prestationer. Ett måste för alla fantasyälskare.");
+        $this->addProductIfNotExists(title: "Wicked", price: 150, imgUrl: "https://cdn.kinocheck.com/i/8mxyyhborj.jpg", stockLevel: 180, categoryName: "Movies", popularityFactor: 9, productDescription: "En musikalfilm som avslöjar den dolda sidan av Oz – sett genom den missförstådda häxan Elphabas ögon. En berättelse om vänskap, mod och vad det innebär att vara sann mot sig själv.");
+        $this->addProductIfNotExists(title: "The Wizard of Oz", price: 130, imgUrl: "https://th.bing.com/th/id/OIP._Vw5JqbqkQrfYhcQPaNXAwHaK9?w=205&h=304&c=7&r=0&o=5&dpr=1.3&pid=1.7", stockLevel: 40, categoryName: "Movies", popularityFactor: 5, productDescription: "Följ Dorothy när hon färdas genom det magiska landet Oz, möter oförglömliga vänner och lär sig att det inte finns någon plats som hemma. En tidlös klassiker fylld med färg, sång och hjärta.");
+        $this->addProductIfNotExists(title: "Into the Spiderverse", price: 120, imgUrl: "https://th.bing.com/th/id/OIP.u-03iGf1uJsiFRsKgd9_cgHaLH?rs=1&pid=ImgDetMain", stockLevel: 20, categoryName: "Movies", popularityFactor: 9, productDescription: "En visuell banbrytande film där flera versioner av Spider-Man möts. Med Miles Morales i centrum, blandas humor, action och stil i en hyllning till mångfald och hjältemod.");
+        $this->addProductIfNotExists(title: "Iron Man", price: 110, imgUrl: "https://posterspy.com/wp-content/uploads/2021/03/Iron_Man-200th_Poster.jpg", stockLevel: 50, categoryName: "Movies", popularityFactor: 9, productDescription: "Tony Stark förändrar världen när han blir Iron Man. Denna film markerade starten på Marvels filmuniversum och levererar både karaktärsdjup och spektakulär action.");
+        $this->addProductIfNotExists(title: "Hairspray", price: 100, imgUrl: "https://i0.wp.com/www.needcoffee.com/wp-content/uploads/2007/07/hairspray-movie-poster.jpg?w=550", stockLevel: 70, categoryName: "Movies", popularityFactor: 7, productDescription: "En musikalisk explosion av färg, dans och 60-talets sociala förändringar. Med charmiga karaktärer och smittande musik hyllar filmen kampen för inkludering och självacceptans.");
+        $this->addProductIfNotExists(title: "Cabaret", price: 130, imgUrl: "https://th.bing.com/th/id/OIP.ekDrOETMHeCVPNRNEtPKTwHaKe?rs=1&pid=ImgDetMain", stockLevel: 30, categoryName: "Movies", popularityFactor: 4, productDescription: "Liza Minnelli briljerar i denna mörka och glamorösa musikal, som utspelar sig i 30-talets Berlin. En film som blandar politik, passion och performance på ett oförglömligt sätt.");
+        $this->addProductIfNotExists(title: "Our Flag Means Death", price: 200, imgUrl: "https://th.bing.com/th/id/OIP.t3P5S8gVlfA3n7kgO0Tm9wHaK9?rs=1&pid=ImgDetMain", stockLevel: 20, categoryName: "TV Show", popularityFactor: 9, productDescription: "En udda men charmig piratkomedi som blandar historisk absurditet med oväntad hjärtevärme. Serien följer gentlemanspiraten Stede Bonnet och hans brokiga besättning i jakten på frihet och vänskap.");
+        $this->addProductIfNotExists(title: "Good Omens", price: 300, imgUrl: "https://wallpapers.com/images/hd/good-omens-2019-tv-series-5tvntvsq4x5t6gwi.jpg", stockLevel: 30, categoryName: "TV Show", popularityFactor: 9, productDescription: "En ängel och en demon förenas för att stoppa apokalypsen. Med briljanta skådespelare och torr brittisk humor är Neil Gaimans och Terry Pratchetts skapelse en himmelsk underhållning.");
+        $this->addProductIfNotExists(title: "Hazbin Hotel", price: 200, imgUrl: "https://th.bing.com/th/id/OIP.n_oyCAQ42EWZHKYFGZDnggHaLH?rs=1&pid=ImgDetMain", stockLevel: 30, categoryName: "TV Show", popularityFactor: 8, productDescription: "I ett färgstarkt helvete försöker Charlie, djävulens dotter, rehabilitera syndare genom ett hotell. En mörk komedi full av sång, satir och stil, med en lojal fanbas.");
+        $this->addProductIfNotExists(title: "Kaos", price: 130, imgUrl: "https://th.bing.com/th/id/R.d256666167cbfc00b5859b59a09e0f1a?rik=djVLw5XWmYKu0w&riu=http%3a%2f%2fwww.impawards.com%2fintl%2fuk%2ftv%2fposters%2fkaos_ver2_xlg.jpg&ehk=UPLZXVJ0OkQMSjwmLDxTzNtv2AeLt%2fsTcSJAC8vH8EM%3d&risl=&pid=ImgRaw&r=0", stockLevel: 10, categoryName: "TV Show", popularityFactor: 5, productDescription: "En mörk och nytolkad version av den grekiska mytologin. Gudarna är trasiga, människorna lider, och framtiden är oviss. En djärv och stilistisk serie för mytälskare med smak för drama.");
+        $this->addProductIfNotExists(title: "Doctor Who", price: 180, imgUrl: "https://th.bing.com/th/id/OIP.odt1KN3OC8afezRc_pbcFAHaKX?rs=1&pid=ImgDetMain", stockLevel: 40, categoryName: "TV Show", popularityFactor: 9, productDescription: "Res genom tid och rum med Doktorn – en mystisk främling i en blå låda. Denna brittiska kultklassiker blandar sci-fi, filosofi och mänskliga frågor i ett ständigt föränderligt äventyr.");
+        $this->addProductIfNotExists(title: "The World According to Jeff Goldblum", price: 200, imgUrl: "https://th.bing.com/th/id/R.b6280612cb729b279675cb455830437e?rik=78q2iQUf3is9Vw&riu=http%3a%2f%2fwww.impawards.com%2ftv%2fposters%2fworld_according_to_jeff_goldblum_ver2_xlg.jpg&ehk=clOlvSHNoxVqWZqNnwvKN8h7ApTJZSk1qa1KfPN095Q%3d&risl=&pid=ImgRaw&r=0", stockLevel: 30, categoryName: "TV Show", popularityFactor: 3, productDescription: "Upptäck världen genom Jeff Goldblums nyfikna ögon. Serien tar oväntade ämnen och gör dem fascinerande – från sneakers till glass. En udda, varm och informativ resa.");
+        $this->addProductIfNotExists(title: "What We Do In The Shadows", price: 300, imgUrl: "https://th.bing.com/th/id/R.632cb4f9cc771993b4cf9c77bdef6e4a?rik=G71Axe4D8aehQg&riu=http%3a%2f%2fwww.impawards.com%2ftv%2fposters%2fwhat_we_do_in_the_shadows_ver11.jpg&ehk=ARu6AFBHDFd%2ftqFv3Tf9siS1gAFkR1%2b3D12fFT3Yl2c%3d&risl=&pid=ImgRaw&r=0", stockLevel: 30, categoryName: "TV Show", popularityFactor: 5, productDescription: "Följ en grupp vampyrer som försöker leva ett normalt liv i modern tid – med katastrofala (och hysteriska) resultat. En mockumentär fylld med absurd humor och charmig vampyrkaos.");
     }
 
     function initDatabase()
@@ -88,7 +87,8 @@ class Database
                 imgUrl VARCHAR(1000),
                 stockLevel INT,
                 categoryName VARCHAR(50),
-                popularityFactor INT
+                popularityFactor INT,
+                productDescription VARCHAR(1000)
             )');
     }
 
@@ -100,9 +100,9 @@ class Database
         return $query->fetch();
     }
 
-    function insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor)
+    function insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor, $productDescription)
     {
-        $sql = "INSERT INTO Products (title, price, stockLevel, imgUrl, categoryName, popularityFactor) VALUES (:title, :price, :stockLevel, :imgUrl, :categoryName, :popularityFactor)";
+        $sql = "INSERT INTO Products (title, price, stockLevel, imgUrl, categoryName, popularityFactor, productDescription) VALUES (:title, :price, :stockLevel, :imgUrl, :categoryName, :popularityFactor, :productDescription)";
         $query = $this->pdo->prepare($sql);
         $query->execute([
             'title' => $title,
@@ -111,13 +111,14 @@ class Database
             'stockLevel' => $stockLevel,
             'categoryName' => $categoryName,
             'popularityFactor' => $popularityFactor,
+            'productDescription' => $productDescription
         ]);
     }
 
     function updateProduct($product)
     {
         $s = "UPDATE Products SET title = :title," .
-            " price = :price, imgUrl = :imgUrl, stockLevel = :stockLevel, categoryName = :categoryName, popularityFactor=:popularityFactor WHERE id = :id";
+            " price = :price, imgUrl = :imgUrl, stockLevel = :stockLevel, categoryName = :categoryName, popularityFactor=:popularityFactor, productDescription=:productDescription WHERE id = :id";
         $query = $this->pdo->prepare($s);
         $query->execute([
             'title' => $product->title,
@@ -126,6 +127,7 @@ class Database
             'stockLevel' => $product->stockLevel,
             'categoryName' => $product->categoryName,
             'popularityFactor' => $product->popularityFactor,
+            'productDescription' => $product->productDescription,
             'id' => $product->id
         ]);
     }
@@ -156,7 +158,7 @@ class Database
     //function getAllProducts($sortCol, $sortOrder){
     function getAllProducts($sortCol = "id", $sortOrder = "asc")
     {
-        if (!in_array($sortCol, ["id", "categoryName", "title", "price", "imgUrl", "stockLevel", "popularityFactor"])) {
+        if (!in_array($sortCol, ["id", "categoryName", "title", "price", "imgUrl", "stockLevel", "popularityFactor", "productDescription"])) {
             $sortCol = "id";
         }
         if (!in_array($sortOrder, ["asc", "desc"])) {
