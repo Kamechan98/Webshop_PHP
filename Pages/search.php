@@ -32,7 +32,7 @@ $sortOrder = $_GET['sortOrder'] ?? "";
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="/">SuperShoppen</a>
+                <a class="navbar-brand" href="/">Bok-och-Film-shoppen!</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -108,14 +108,14 @@ $sortOrder = $_GET['sortOrder'] ?? "";
                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
                                 <?php } ?>        
                                 <!-- Product image-->
-                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <img class="card-img-top" src="<?php echo $prod->imgUrl; ?>" alt="..." />
                                 <!-- Product details-->
                                 <div class="card-body p-4">
                                     <div class="text-center">
                                         <!-- Product name-->
                                         <h5 class="fw-bolder"><?php echo $prod->title; ?></h5>
                                         <!-- Product price-->
-                                        $<?php echo $prod->price; ?>.00
+                                        SEK <?php echo $prod->price; ?>.00
                                     </div>
                                 </div>
                                 <!-- Product actions-->

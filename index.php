@@ -15,6 +15,9 @@ $router = new Router();
 $router->addRoute('/', function () {
     require __DIR__ . '/Pages/index.php';
 });
+$router->addRoute('/products', function () {
+    require __DIR__ . '/Pages/product_details.php';
+});
 $router->addRoute('/category', function () {
     require __DIR__ . '/Pages/category.php';
 });

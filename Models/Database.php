@@ -92,7 +92,7 @@ class Database
             )');
     }
 
-    function getProduct($id)
+    function getProductById($id)
     {
         $query = $this->pdo->prepare("SELECT * FROM Products WHERE id = :id");
         $query->execute(['id' => $id]);
