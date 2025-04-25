@@ -27,14 +27,14 @@ $dbContext = new Database();
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="/index.php">Bok-och-Film-shoppen!</a>
+                <a class="navbar-brand" href="/">Bok-och-Film-shoppen!</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kategorier</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/">All Products</a></li>
+                                <li><a class="dropdown-item" href="/category">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
                                     foreach($dbContext->getAllCategories() as $cat){
@@ -58,11 +58,11 @@ $dbContext = new Database();
             </div>
         </nav>
         <!-- Header-->
-        <header class="bg-dark py-5">
+        <header class="bg-warning py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Bok-och-Film-shoppen!</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Handla massa onödigt hos oss!</p>
+                    <p class="lead fw-normal text-white-50 mb-0">Hitta dina nya favorithistorier och äventyr hos oss!</p>
                 </div>
             </div>
         </header>
@@ -72,8 +72,7 @@ $dbContext = new Database();
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 <?php 
-                foreach($dbContext->getAllProducts() as $prod){
-                    if($prod->popularityFactor >= 8){
+                foreach($dbContext->getPopularProducts() as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">
@@ -88,7 +87,7 @@ $dbContext = new Database();
                                         <!-- Product name-->
                                         <h5 class="fw-bolder"><?php echo $prod->title; ?></h5>
                                         <!-- Product price-->
-                                        $<?php echo $prod->price; ?>.00
+                                        SEK: <?php echo $prod->price; ?>.00
                                     </div>
                                 </div>
                                 <!-- Product actions-->
@@ -98,7 +97,7 @@ $dbContext = new Database();
                                     </div>
                             </div>
                         </div>    
-                    <?php }} ?>  
+                    <?php } ?>  
       
                 </div>
             </div> 

@@ -8,6 +8,14 @@ $dbContext = new Database();
 // Hämta den produkt med detta ID
 $product = $dbContext->getProductById($id); // TODO felhantering om inget produkt
 
+// $product->title = "";
+// $product->stockLevel = "";
+// $product->price = "";
+// $product->imgUrl = "";
+// $product->categoryName = "";
+// $product->popularityFactor = "";
+// $product->productDescription = "";
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Här kommer vi när man har tryckt  på SUBMIT
@@ -18,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->imgUrl = $_POST['imgUrl'];
     $product->categoryName = $_POST['categoryName'];
     $product->popularityFactor = $_POST['popularityFactor'];
+    $product->productDescription = $_POST['productDescription'];
     $dbContext->updateProduct($product);
     echo "<h1>Produkten har uppdaterats</h1>";
 } else {
@@ -107,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         value="<?php echo $product->stockLevel ?>">
                 </div>
                 <div class="form-group">
-                    <label for="categpryName">Category name:</label>
+                    <label for="categoryName">Category name:</label>
                     <input type="text" class="form-control" name="categoryName"
                         value="<?php echo $product->categoryName ?>">
                 </div>
@@ -115,6 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="popularityFactor">Popularity factor</label>
                     <input type="number" class="form-control" name="popularityFactor"
                         value="<?php echo $product->popularityFactor ?>">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Product description:</label>
+                    <input type="text" class="form-control" name="productDescription"
+                        value="<?php echo $product->productDescription ?>">
                 </div>
                 <input type="submit" class="btn btn-primary" value="Uppdatera">
             </form>
@@ -132,10 +146,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 </html>
-
-<!-- 
-<input type="text" name="title" value="<?php echo $product->title ?>">
-        <input type="text" name="price" value="<?php echo $product->price ?>">
-        <input type="text" name="stockLevel" value="<?php echo $product->stockLevel ?>">
-        <input type="text" name="categoryName" value="<?php echo $product->categoryName ?>">
-        <input type="submit" value="Uppdatera"> -->

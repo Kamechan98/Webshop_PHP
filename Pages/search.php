@@ -11,6 +11,15 @@ $q = $_GET['q'] ?? "";
 $sortCol = $_GET['sortCol'] ?? "";
 $sortOrder = $_GET['sortOrder'] ?? "";
 
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$pageSize = 8; // Antal produkter per sida
+$offset = ($page - 1) * $pageSize;
+
+$totalProducts = $dbContext->countSearchResults($q);
+$totalPages = ceil($totalProducts / $pageSize);
+
+$products = $dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $offset);
+
 ?>
 
 <!DOCTYPE html>
@@ -79,11 +88,11 @@ $sortOrder = $_GET['sortOrder'] ?? "";
             </div>
         </nav>
         <!-- Header-->
-        <header class="bg-dark py-5">
+        <header class="bg-warning py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Super shoppen</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Handla massa onödigt hos oss!</p>
+                    <h1 class="display-4 fw-bolder">Bok-och-Film-shoppen!</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Hitta dina nya favorithistorier och äventyr hos oss!</p>
                 </div>
             </div>
         </header>
@@ -95,12 +104,10 @@ $sortOrder = $_GET['sortOrder'] ?? "";
                         <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Price asc</a>
                         <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Price desc</a>
 
-
-
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 
                 <?php 
-                    foreach($dbContext->searchProducts($q,$sortCol, $sortOrder) as $prod){
+                    foreach($dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $offset) as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">
@@ -125,15 +132,17 @@ $sortOrder = $_GET['sortOrder'] ?? "";
                             </div>
                         </div>    
                     <?php } ?>  
-                          
-                </div>
             </div> 
+            <?php 
+                    $totalProducts = $dbContext->countSearchResults($q);
+                    $totalPages = ceil($totalProducts / $pageSize);
+
+                    for($i = 1; $i <= $totalPages; $i++) {
+                    echo "<a class='btn btn-secondary' href='?q=" . urlencode($q) . "&sortCol=$sortCol&sortOrder=$sortOrder&page=$i'>$i</a>";
+                    }
+                    ?>
         </section>
-
-
-
-
-        <!-- Footer-->
+  <!-- Footer-->
          <?php Footer(); ?>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

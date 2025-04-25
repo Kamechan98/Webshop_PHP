@@ -52,7 +52,7 @@ if (!$product) {
                 </div>
                 <div class="col-md-6">
                     <h2 class="fw-bolder"><?php echo $product->title; ?></h2>
-                    <p class="h4">$<?php echo $product->price; ?>.00</p>
+                    <p class="h4">SEK: <?php echo $product->price; ?>.00</p>
                     <p><?php echo $product->productDescription; ?></p>
                     <div class="mt-4">
                         <button class="btn btn-primary">Add to cart</button>

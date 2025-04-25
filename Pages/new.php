@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imgUrl = $_POST['imgUrl'];
     $categoryName = $_POST['categoryName'];
     $popularityFactor = $_POST['popularityFactor'];
-    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor, $description);
+    $productDescription = $_POST['productDescription'];
+    $dbContext->insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor, $productDescription);
     header("Location: /admin/products");
     exit;
 } else {
@@ -66,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
                             }
                             ?>
-                            <li><a class="dropdown-item" href="#!">En cat</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
@@ -105,12 +105,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" class="form-control" name="imgUrl" value="">
                 </div>
                 <div class="form-group">
-                    <label for="categpryName">Category name:</label>
+                    <label for="categoryName">Category name:</label>
                     <input type="text" class="form-control" name="categoryName" value="">
                 </div>
                 <div class="form-group">
                     <label for="popularityFactor">Popularity factor</label>
                     <input type="number" class="form-control" name="popularityFactor" value="">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Product description</label>
+                    <input type="text" class="form-control" name="productDescription" value="">
                 </div>
                 <input type="submit" class="btn btn-primary" value="Skapa">
             </form>

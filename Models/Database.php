@@ -140,18 +140,19 @@ class Database
 
 
 
-    function searchProducts($q, $sortCol, $sortOrder)
+    public function searchProducts($query, $sortCol = "id", $sortOrder = "asc", $limit = 8, $offset = 0)
     {
-        if (!in_array($sortCol, ["title", "price"])) {
-            $sortCol = "title";
-        }
-        if (!in_array($sortOrder, ["asc", "desc"])) {
-            $sortOrder = "asc";
-        }
+        $sortCol = in_array($sortCol, ['title', 'price', 'id']) ? $sortCol : 'id';
+        $sortOrder = ($sortOrder === 'desc') ? 'desc' : 'asc';
 
-        $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q or categoryName like :q ORDER BY $sortCol $sortOrder"); // Products är TABELL
-        $query->execute(['q' => "%$q%"]);
-        return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+        $sql = "SELECT * FROM Products WHERE title LIKE :query ORDER BY $sortCol $sortOrder LIMIT :limit OFFSET :offset";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':query', '%' . $query . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'Product');
     }
 
 
@@ -170,21 +171,67 @@ class Database
         return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
     }
 
-    function getCategoryProducts($catName)
+    function getCategoryProducts($catName = "", $limit = 8, $offset = 0)
     {
         if ($catName == "") {
-            $query = $this->pdo->query("SELECT * FROM Products"); // Products är TABELL 
-            return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
+            $sql = "SELECT * FROM Products LIMIT :limit OFFSET :offset";
+            $stmt = $this->pdo->prepare($sql);
+        } else {
+            $sql = "SELECT * FROM Products WHERE categoryName = :category LIMIT :limit OFFSET :offset";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue('category', $catName, PDO::PARAM_STR);
         }
-        $query = $this->pdo->prepare("SELECT * FROM Products WHERE categoryName = :categoryName");
-        $query->execute(['categoryName' => $catName]);
-        return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+        $stmt->bindValue('limit', (int) $limit, PDO::PARAM_INT);
+        $stmt->bindValue('offset', (int) $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'Product');
     }
     function getAllCategories()
     {
         // SELECT DISTINCT categoryName FROM Products
         $data = $this->pdo->query('SELECT DISTINCT categoryName FROM Products')->fetchAll(PDO::FETCH_COLUMN);
         return $data;
+    }
+
+    function countCategoryProducts($catName = "")
+    {
+        if ($catName === "") {
+            $sql = "SELECT COUNT(*) FROM Products";
+            $stmt = $this->pdo->query($sql);
+        } else {
+            $sql = "SELECT COUNT(*) FROM Products WHERE categoryName = :category";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':category' => $catName]);
+        }
+        return $stmt->fetchColumn();
+    }
+
+    function countSearchProducts($catName = "")
+    {
+        if ($catName === "") {
+            $sql = "SELECT COUNT(*) FROM Products";
+            $stmt = $this->pdo->query($sql);
+        } else {
+            $sql = "SELECT COUNT(*) FROM Products WHERE category = :category";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':category' => $catName]);
+        }
+        return $stmt->fetchColumn();
+    }
+
+    public function countSearchResults($query)
+    {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM Products WHERE title LIKE :query");
+        $stmt->execute([':query' => '%' . $query . '%']);
+        return $stmt->fetchColumn();
+    }
+
+
+    function getPopularProducts()
+    {
+        $query = $this->pdo->query("SELECT * FROM Products ORDER BY popularityFactor DESC LIMIT 10"); // Products är TABELL 
+        return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
     }
 
 }

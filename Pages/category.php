@@ -7,6 +7,10 @@ $dbContext = new Database();
 
 $catName = $_GET['catname'] ?? ""; 
 
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$pageSize = 8;
+$offset = ($page - 1) * $pageSize;
+
 $header = $catName;
 if($catName == ""){
     $header = "All Products";
@@ -63,11 +67,11 @@ if($catName == ""){
             </div>
         </nav>
         <!-- Header-->
-        <header class="bg-dark py-5">
+        <header class="bg-warning py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Super shoppen</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Handla massa onödigt hos oss!</p>
+                    <h1 class="display-4 fw-bolder">Bok-och-Film-shoppen!</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Hitta dina nya favorithistorier och äventyr hos oss!</p>
                 </div>
             </div>
         </header>
@@ -76,7 +80,7 @@ if($catName == ""){
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 <?php 
-                foreach($dbContext->getCategoryProducts($catName) as $prod){
+                foreach($dbContext->getCategoryProducts($catName, $pageSize, $offset) as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">
@@ -91,7 +95,7 @@ if($catName == ""){
                                         <!-- Product name-->
                                         <h5 class="fw-bolder"><?php echo $prod->title; ?></h5>
                                         <!-- Product price-->
-                                        $<?php echo $prod->price; ?>.00
+                                        SEK: <?php echo $prod->price; ?>.00
                                     </div>
                                 </div>
                                 <!-- Product actions-->
@@ -101,14 +105,18 @@ if($catName == ""){
                             </div>
                         </div>    
                     <?php } ?>  
-                       
+      
                 </div>
+                <?php 
+                $totalProducts = $dbContext->countCategoryProducts($catName);
+                $totalPages = ceil($totalProducts / $pageSize);
+                for($i = 1; $i <= $totalPages; $i++) {
+                    echo "<a class='btn btn-secondary' href='?catname=$catName&page=$i'>$i</a>";
+                }
+                ?>
             </div> 
+        
         </section>
-
-
-
-
         <!-- Footer-->
          <?php Footer(); ?>
         <!-- Bootstrap core JS-->
