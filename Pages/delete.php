@@ -1,7 +1,22 @@
 <?php
 require_once('Models/Database.php');
 require_once('Models/Product.php');
+require_once('Models/Cart.php');
 require_once('Components/Footer.php');
+require_once('Components/Nav.php');
+
+$dbContext = new Database();
+
+$userId = null;
+$session_id = null;
+
+if ($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
+    $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+}
+//$cart = $dbContext->getCartByUser($userId);
+$session_id = session_id();
+
+$cart = new Cart($dbContext, $session_id, $userId);
 
 $id = $_GET['id'];
 $confirmed = $_GET['confirmed'] ?? false;
@@ -10,7 +25,7 @@ $product = $dbContext->getProductById($id);
 
 if ($confirmed == true) {
     $dbContext->deleteProduct($id);
-    header("Location: /admin/admin");
+    header("Location: /admin/products");
     exit;
 }
 
@@ -34,50 +49,14 @@ if ($confirmed == true) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="/">Bok-och-Film-shoppen!</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Kategorier</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">All Products</a></li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-                            <?php
-                            foreach ($dbContext->getAllCategories() as $cat) {
-                                echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
-                            }
-                            ?>
-                            <li><a class="dropdown-item" href="#!">En cat</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
-                </ul>
-                <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </nav>
+    <?php echo Nav($dbContext, $cart); ?>
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
 
             <h1><?php echo $product->title; ?></h1>
             <h2>Är du säker att du vill ta bort?</h2>
             <a href="/admin/delete?id=<?php echo $id; ?>&confirmed=true" class="btn btn-danger">Ja</a>
-            <a href="/admin/admin" class="btn btn-primary">Nej</a>
+            <a href="/admin/products" class="btn btn-primary">Nej</a>
 
         </div>
     </section>

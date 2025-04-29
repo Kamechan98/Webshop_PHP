@@ -3,9 +3,26 @@
 #include_once("Models/Products.php") - OK även om filen inte finns
 require_once("Models/Product.php");
 require_once("components/Footer.php");
+require_once("components/Nav.php");
 require_once("Models/Database.php");
+require_once("Models/UserDatabase.php");
+require_once('Models/Cart.php');
+require_once('Models/CartItem.php');
+
 
 $dbContext = new Database();
+
+$userId = null;
+$session_id = null;
+ 
+if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){
+    $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+}
+    //$cart = $dbContext->getCartByUser($userId);
+$session_id = session_id();
+ 
+$cart = new Cart($dbContext, $session_id, $userId);
+
 ?>
 
 <!DOCTYPE html>
@@ -25,38 +42,7 @@ $dbContext = new Database();
     </head>
     <body>
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="/">Bok-och-Film-shoppen!</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kategorier</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/category">All Products</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                    <?php
-                                    foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
-                                    } 
-                                    ?> 
-                                   
-                            </ul> 
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
-                    </ul>
-                    <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </nav>
+        <?php echo Nav($dbContext, $cart) ?>
         <!-- Header-->
         <header class="bg-warning py-5">
             <div class="container px-4 px-lg-5 my-5">
@@ -92,8 +78,8 @@ $dbContext = new Database();
                                 </div>
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/products?id=<?php echo $prod->id; ?>">View Details</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/addToCart?productId=<?php echo $prod->id ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ) ?>">Add to cart</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/products?id=<?php echo $prod->id; ?>">View Details</a></div>
                                     </div>
                             </div>
                         </div>    

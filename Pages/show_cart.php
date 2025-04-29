@@ -1,9 +1,23 @@
 <?php
-require_once('Models/Product.php');
+require_once("Models/Product.php");
 require_once("components/Footer.php");
-require_once('Models/Database.php');
+require_once("Models/Database.php");
+require_once("Models/UserDataBase.php");
+require_once('Models/Cart.php');
+require_once('Models/CartItem.php');
 
 $dbContext = new Database();
+
+$userId = null;
+$session_id = null;
+
+if ($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
+    $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+}
+//$cart = $dbContext->getCartByUser($userId);
+$session_id = session_id();
+
+$cart = new Cart($dbContext, $session_id, $userId);
 
 ?>
 
@@ -25,9 +39,10 @@ $dbContext = new Database();
 </head>
 
 <body>
+    <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="/">SuperShoppen</a>
+            <a class="navbar-brand" href="/">Bok-och-Film-shoppen!</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -37,16 +52,16 @@ $dbContext = new Database();
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Kategorier</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">All Products</a></li>
+                            <li><a class="dropdown-item" href="/">All Products</a></li>
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
                             <?php
                             foreach ($dbContext->getAllCategories() as $cat) {
-                                echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
+                                echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
                             }
                             ?>
-                            <li><a class="dropdown-item" href="#!">En cat</a></li>
+
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
@@ -56,32 +71,55 @@ $dbContext = new Database();
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                        <span class="badge  text-white ms-1 rounded-pill">0</span>
                     </button>
                 </form>
             </div>
         </div>
     </nav>
+    <!-- Section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <h1>Tack</h1>
-            <p>Tack för din registrering</p>
-            <a href="/user/login" class="btn btn-primary">Logga in</a>
+            <table class="table">
+                <thead>
+                    <th>Name
+                    </th>
+                    <th>A-pris
+                    </th>
+                    <th>Antal
+                    </th>
+                    <th>Row price
+                    </th>
+                    <th>action</th>
+                </thead>
 
-
-
-
+                <tbody>
+                    <?php foreach ($cart->getItems() as $cartItem) { ?>
+                        <tr>
+                            <td><?php echo $cartItem->productName; ?></td>
+                            <td><?php echo $cartItem->productPrice; ?></td>
+                            <td><?php echo $cartItem->quantity; ?></td>
+                            <td><?php echo $cartItem->rowPrice; ?></td>
+                            <td>
+                                <a href="deleteFromCart?id=<?php echo $cartItem->id; ?>" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td><?php echo $cart->getTotalPrice(); ?> </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
-
-
-
+    <!-- Footer-->
     <?php Footer(); ?>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
-
 </body>
 
 </html>

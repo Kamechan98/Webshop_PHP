@@ -1,6 +1,9 @@
 <?php
 
 require_once('Models/UserDatabase.php');
+require_once('Models/Cart.php');
+require_once('Models/CartItem.php');
+
 
 // Hur kan man strukturera klasser
 // Hir kan man struktirera filer? Folders + subfolders
@@ -90,6 +93,15 @@ class Database
                 popularityFactor INT,
                 productDescription VARCHAR(1000)
             )');
+        $this->pdo->query('CREATE TABLE IF NOT EXISTS CartItem (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                productId INT,
+                quantity INT,
+                addedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                sessionId VARCHAR(50), # b77e0a1d7b4f9286f4ddcb8c61b80403
+                userId INT NULL,
+                FOREIGN KEY (productId) REFERENCES Products(id) ON DELETE CASCADE
+            )');
     }
 
     function getProductById($id)
@@ -100,7 +112,7 @@ class Database
         return $query->fetch();
     }
 
-    function insertProduct($title, $stockLevel, $imgUrl, $price, $categoryName, $popularityFactor, $productDescription)
+    function insertProduct($title, $price, $imgUrl, $stockLevel, $categoryName, $popularityFactor, $productDescription)
     {
         $sql = "INSERT INTO Products (title, price, stockLevel, imgUrl, categoryName, popularityFactor, productDescription) VALUES (:title, :price, :stockLevel, :imgUrl, :categoryName, :popularityFactor, :productDescription)";
         $query = $this->pdo->prepare($sql);
@@ -226,12 +238,47 @@ class Database
         $stmt->execute([':query' => '%' . $query . '%']);
         return $stmt->fetchColumn();
     }
-
-
     function getPopularProducts()
     {
         $query = $this->pdo->query("SELECT * FROM Products ORDER BY popularityFactor DESC LIMIT 10"); // Products är TABELL 
         return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
+    }
+
+    //CART FUNKTIONS
+    function getCartItems($userId, $sessionId)
+    {
+
+        $query = $this->pdo->prepare("SELECT CartItem.Id as id, CartItem.productId, CartItem.quantity, 
+        Products.title as productName, Products.price as productPrice, Products.price * CartItem.quantity as rowPrice     
+        FROM CartItem JOIN Products ON Products.id=CartItem.productId  WHERE userId=:userId or sessionId = :sessionId");
+        $query->execute(['sessionId' => $sessionId, 'userId' => $userId]);
+
+
+        return $query->fetchAll(PDO::FETCH_CLASS, 'CartItem');
+    }
+
+    function convertSessionToUser($session_id, $userId, $newSessionId)
+    {
+        $query = $this->pdo->prepare("UPDATE CartItem SET userId=:userId, sessionId=:newSessionId WHERE sessionId = :sessionId");
+        $query->execute(['sessionId' => $session_id, 'userId' => $userId, 'newSessionId' => $newSessionId]);
+    }
+
+    function updateCartItem($userId, $sessionId, $productId, $quantity)
+    {
+        if ($quantity <= 0) {
+            $query = $this->pdo->prepare("DELETE FROM CartItem WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");
+            $query->execute(['userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId]);
+            return;
+        }
+        $query = $this->pdo->prepare("SELECT * FROM CartItem  WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");
+        $query->execute(['userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId]);
+        if ($query->rowCount() == 0) {
+            $query = $this->pdo->prepare("INSERT INTO CartItem (productId, quantity, sessionId, userId) VALUES (:productId, :quantity, :sessionId, :userId)");
+            $query->execute(['userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId, 'quantity' => $quantity]);
+        } else {
+            $query = $this->pdo->prepare("UPDATE CartItem SET quantity = :quantity WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");
+            $query->execute(['userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId, 'quantity' => $quantity]);
+        }
     }
 
 }

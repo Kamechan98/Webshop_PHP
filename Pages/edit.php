@@ -19,7 +19,6 @@ $product = $dbContext->getProductById($id); // TODO felhantering om inget produk
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Här kommer vi när man har tryckt  på SUBMIT
-    // IMORGON TISDAG SÅ UPDATE PRODUCT SET title = $_POST['title'] WHERE id = $id
     $product->title = $_POST['title'];
     $product->stockLevel = $_POST['stockLevel'];
     $product->price = $_POST['price'];
@@ -79,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             ?>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/user/register">Create account</a></li>
                 </ul>
                 <form class="d-flex">
                     <button class="btn btn-outline-dark" type="submit">

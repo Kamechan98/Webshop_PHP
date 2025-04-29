@@ -4,8 +4,12 @@
 // om url = "/admin" så visa admin.php
 // om url = "/edit" så visa edit.php
 // om url = "/" så visa index.php
+ob_start(); //Start output buffering
+session_start(); //Start session
 require_once('Utils/Router.php');
 require_once('vendor/autoload.php');
+
+
 
 $dotenv = Dotenv\Dotenv::createImmutable(".");
 $dotenv->load();
@@ -32,6 +36,24 @@ $router->addRoute('/admin/new', function () {
 });
 $router->addRoute('/admin/delete', function () {
     require __DIR__ . '/Pages/delete.php';
+});
+$router->addRoute('/user/login', function () {
+    require_once(__DIR__ . '/Pages/users/login.php');
+});
+$router->addRoute('/user/logout', function () {
+    require_once(__DIR__ . '/Pages/users/logout.php');
+});
+$router->addRoute('/user/register', function () {
+    require_once(__DIR__ . '/Pages/users/register_user.php');
+});
+$router->addRoute('/user/registerThanks', function () {
+    require_once(__DIR__ . '/Pages/users/register_thanks.php');
+});
+$router->addRoute('/AddToCart', function () {
+    require_once(__DIR__ . '/Pages/add_to_cart.php');
+});
+$router->addRoute('/cart', function () {
+    require_once(__DIR__ . '/Pages/show_cart.php');
 });
 $router->addRoute('/search', function () {
     require_once(__DIR__ . '/Pages/search.php');
