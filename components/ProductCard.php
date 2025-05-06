@@ -23,7 +23,8 @@ function ProductCard($prod)
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <div class="text-center"><a class="btn btn-outline-dark mt-auto"
                         href="/addToCart?productId=<?php echo $prod->id ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>">Add
-                        to cart</a></div>
+                        to cart</a>
+                </div>
                 <div class="text-center"><a class="btn btn-outline-dark mt-auto"
                         href="/products?id=<?php echo $prod->id; ?>">View Details</a></div>
             </div>

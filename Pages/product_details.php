@@ -9,6 +9,13 @@ require_once("Models/Cart.php");
 $dbContext = new Database();
 $userId = null;
 $session_id = null;
+
+if ($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
+    $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+}
+//$cart = $dbContext->getCartByUser($userId);
+$session_id = session_id();
+
 $cart = new Cart($dbContext, $session_id, $userId);
 
 if (!isset($_GET['id'])) {
@@ -43,7 +50,6 @@ if (!$product) {
     <!-- Navigation-->
     <?php echo Nav($dbContext, $cart) ?>
 
-
     <!-- Produktdetaljer-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
@@ -55,8 +61,9 @@ if (!$product) {
                     <h2 class="fw-bolder"><?php echo $product->title; ?></h2>
                     <p class="h4">SEK: <?php echo $product->price; ?>.00</p>
                     <p><?php echo $product->productDescription; ?></p>
-                    <div class="mt-4">
-                        <button class="btn btn-primary">Add to cart</button>
+                    <div class="text-start"><a class="btn btn-outline-dark mt-auto"
+                            href="/addToCart?productId=<?php echo $product->id ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>">Add
+                            to cart</a>
                     </div>
                 </div>
             </div>
