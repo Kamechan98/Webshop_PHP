@@ -55,7 +55,7 @@ $cart = new Cart($dbContext, $session_id, $userId);
                     </th>
                     <th>Row price
                     </th>
-                    <th>action</th>
+                    <th>Action</th>
                 </thead>
 
                 <tbody>
