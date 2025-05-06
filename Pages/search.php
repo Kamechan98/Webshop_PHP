@@ -4,6 +4,7 @@
 require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("components/Nav.php");
+require_once("Models/Cart.php");
 require_once("Models/Database.php");
 
 $dbContext = new Database();
@@ -94,6 +95,7 @@ $products = $dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $off
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/products?id=<?php echo $prod->id; ?>">View Details</a></div>
                                 </div>
                             </div>
                         </div>    

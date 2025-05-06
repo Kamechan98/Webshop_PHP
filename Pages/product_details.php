@@ -3,8 +3,13 @@
 require_once("Models/Product.php");
 require_once("Models/Database.php");
 require_once("components/Footer.php");
+require_once("components/Nav.php");
+require_once("Models/Cart.php");
 
 $dbContext = new Database();
+$userId = null;
+$session_id = null;
+$cart = new Cart($dbContext, $session_id, $userId);
 
 if (!isset($_GET['id'])) {
     echo "Ingen produkt angiven!";
@@ -36,12 +41,8 @@ if (!$product) {
 
 <body>
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="/">Bok-och-Film-shoppen!</a>
-            <!-- Här kan du lägga till länkar för andra sidor -->
-        </div>
-    </nav>
+    <?php echo Nav($dbContext, $cart) ?>
+
 
     <!-- Produktdetaljer-->
     <section class="py-5">

@@ -49,7 +49,7 @@ $router->addRoute('/user/register', function () {
 $router->addRoute('/user/registerThanks', function () {
     require_once(__DIR__ . '/Pages/users/register_thanks.php');
 });
-$router->addRoute('/AddToCart', function () {
+$router->addRoute('/addToCart', function () {
     require_once(__DIR__ . '/Pages/add_to_cart.php');
 });
 $router->addRoute('/cart', function () {
