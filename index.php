@@ -4,6 +4,7 @@
 // om url = "/admin" så visa admin.php
 // om url = "/edit" så visa edit.php
 // om url = "/" så visa index.php
+error_reporting(E_ALL & ~E_DEPRECATED); // Enable all error reporting & 
 ob_start(); //Start output buffering
 session_start(); //Start session
 require_once('Utils/Router.php');
@@ -52,6 +53,9 @@ $router->addRoute('/user/registerThanks', function () {
 $router->addRoute('/addToCart', function () {
     require_once(__DIR__ . '/Pages/add_to_cart.php');
 });
+$router->addRoute('/removeFromCart', function () {
+    require_once(__DIR__ . '/Pages/remove_from_cart.php');
+});
 $router->addRoute('/cart', function () {
     require_once(__DIR__ . '/Pages/show_cart.php');
 });
@@ -59,5 +63,12 @@ $router->addRoute('/search', function () {
     require_once(__DIR__ . '/Pages/search.php');
 });
 
+$router->addRoute('/checkout', function () { // Betyder ta bort EN 
+        require_once( __DIR__ .'/Pages/checkout.php');
+});
+
+$router->addRoute('/checkoutsuccess', function () { // Betyder ta bort EN 
+        require_once( __DIR__ .'/Pages/checkoutsuccess.php');
+});
+
 $router->dispatch();
-?>

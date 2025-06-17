@@ -56,18 +56,26 @@ class Cart
         $this->dbContext->updateCartItem($this->userId, $this->session_id, $productId, $item->quantity);
     }
 
-    public function removeItem($productId, $quantity)
-    {
+    public function removeItem($productId, $quantity) {
         $item = $this->getCartItem($productId);
-        if (!$item) {
+        if( !$item) {
             return;
         }
         $item->quantity -= $quantity;
-        $this->dbContext->updateCartItem($this->userId, $this->session_id, $productId, $item->quantity);
+        $this->dbContext->updateCartItem($this->userId,$this->session_id, $productId, $item->quantity);
         if ($item->quantity <= 0) {
             array_splice($this->cartItems, array_search($item, $this->cartItems), 1);
         }
     }
+
+// public function deleteCartItem($userId, $sessionId, $productId)
+// {
+//     // Gör detta enligt hur din databas fungerar — exempelkod:
+//     $query = "DELETE FROM cart_items WHERE product_id = ? AND (user_id = ? OR session_id = ?)";
+//     $stmt = $this->conn->prepare($query);
+//     $stmt->execute([$productId, $userId, $sessionId]);
+// }
+
 
     public function getCartItem($productId)
     {
@@ -84,8 +92,7 @@ class Cart
         return $this->cartItems;
     }
 
-    public function clearCart()
-    {
+     public function clearCart() {
         $this->cartItems = [];
     }
 }

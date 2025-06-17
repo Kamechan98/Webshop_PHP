@@ -30,6 +30,9 @@ function Nav($dbContext, $cart)
                     <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="/user/register">Create account</a></li>
                 </ul>
+                <form action="/search" method="GET">
+                    <input type="text" name="q" placeholder="Search" class="form-control">
+                </form>
                 <form class="d-flex">
                     <a class="btn btn-outline-dark" href="/cart" type="submit">
                         <i class="bi-cart-fill me-1"></i>

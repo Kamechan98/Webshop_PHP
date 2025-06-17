@@ -26,6 +26,15 @@ $cart = new Cart($dbContext, $session_id, $userId);
 <html lang="en">
 
 <head>
+   <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-33MXX941B5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-33MXX941B5');
+</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -40,6 +49,44 @@ $cart = new Cart($dbContext, $session_id, $userId);
 </head>
 
 <body>
+    <?php 
+    
+    $googleItems = [];
+    foreach($cart->getItems() as $cartitem){
+        array_push($googleItems, [
+            
+            "quantity" => $cartitem->quantity,
+            "price" =>$cartitem->productPrice,
+            "item_id"=>$cartitem->id,
+            "item_name"=>$cartitem->productName,
+        ]);
+    }
+    
+    ?>
+    <script>
+    gtag("event", "view_cart", {
+    currency: "SEK",
+    value: <?php echo $cart->getTotalPrice(); ?>,
+    items: [
+        <?php echo json_encode($googleItems); ?>
+    ]
+    });
+
+
+
+    function onCheckout(){
+        gtag("event", "begin_checkout", {
+        currency: "SEK",
+        value: <?php echo $cart->getTotalPrice(); ?>,
+        items: [
+            <?php echo json_encode($googleItems); ?>
+        ]
+        });
+
+    }
+
+    </script>    
+
     <!-- Navigation-->
     <?php echo Nav($dbContext, $cart) ?>
     <!-- Section-->
@@ -49,7 +96,7 @@ $cart = new Cart($dbContext, $session_id, $userId);
                 <thead>
                     <th>Name
                     </th>
-                    <th>A-pris
+                    <th>Pris
                     </th>
                     <th>Antal
                     </th>
@@ -66,14 +113,18 @@ $cart = new Cart($dbContext, $session_id, $userId);
                             <td><?php echo $cartItem->quantity; ?></td>
                             <td><?php echo $cartItem->rowPrice; ?></td>
                             <td>
-                                <a href="deleteFromCart?id=<?php echo $cartItem->id; ?>" class="btn btn-danger">Delete</a>
+                            <a href="/addToCart?productId=<?php echo $cartItem->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-primary">+</a>                                            
+                            <a href="/removeFromCart?productId=<?php echo $cartItem->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-danger">-</a>                                            
+                            <a href="/removeFromCart?removeCount=<?php echo $cartItem->quantity ?>&productId=<?php echo $cartItem->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-danger">DELETE ALL</a>                                            
                             </td>
                         </tr>
                     <?php } ?>
                     <tr>
                         <td colspan="3">Total</td>
                         <td><?php echo $cart->getTotalPrice(); ?> </td>
-                        <td></td>
+                        <td>
+                        <a href="/checkout" onclick="onCheckout()" class="btn btn-success">Checkout</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

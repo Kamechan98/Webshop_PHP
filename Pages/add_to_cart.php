@@ -12,6 +12,7 @@ $fromPage = $_GET['fromPage'] ?? "";
 $userId = null;
 $session_id = null;
 
+
 if ($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
     $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
 }

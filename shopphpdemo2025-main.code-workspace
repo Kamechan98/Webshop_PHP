@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "shopphpdemo2025-main",
+			"path": "."
+		},
+		{
+			"name": "vendor",
+			"path": "../../../WIE24S - Systemstöd och integration med 3-partssystem/Gruppuppgift/3partshoppen/vendor"
+		}
+	],
+	"settings": {}
+}

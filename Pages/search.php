@@ -9,6 +9,7 @@ require_once("components/ProductCard.php");
 require_once('Models/Cart.php');
 require_once('Models/CartItem.php');
 require_once("Models/Database.php");
+require_once("Utils/SearchEngine.php");
 
 $dbContext = new Database();
 
@@ -23,20 +24,16 @@ $session_id = session_id();
 
 $cart = new Cart($dbContext, $session_id, $userId);
 
-
 $q = $_GET['q'] ?? "";
-$sortCol = $_GET['sortCol'] ?? "";
-$sortOrder = $_GET['sortOrder'] ?? "";
+$sortCol = $_GET['sortCol'] ?? "title";
+$sortOrder = $_GET['sortOrder'] ?? "asc";
+$pageNo = $_GET['pageNo'] ?? "1";
 
-$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$pageSize = 8; // Antal produkter per sida
-$offset = ($page - 1) * $pageSize;
+$pageSize = $_GET['pageSize'] ?? "8";
 
-$totalProducts = $dbContext->countSearchResults($q);
-$totalPages = ceil($totalProducts / $pageSize);
+$searchEngine = new SearchEngine();
 
-$products = $dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $offset);
-
+$result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize);
 ?>
 
 <!DOCTYPE html>
@@ -62,29 +59,34 @@ $products = $dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $off
     <!-- Header-->
     <?php echo NavHeader(); ?>
     <!-- Section-->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <a href="?sortCol=title&sortOrder=asc&q=<?php echo $q; ?>" class="btn btn-secondary">Title asc</a>
-            <a href="?sortCol=title&sortOrder=desc&q=<?php echo $q; ?>" class="btn btn-secondary">Title desc</a>
-            <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q; ?>" class="btn btn-secondary">Price asc</a>
-            <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q; ?>" class="btn btn-secondary">Price desc</a>
-
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-                <?php
-                foreach ($dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $offset) as $prod) {
-                    ProductCard($prod);
-                    ?>
+         <section class="py-5">
+        <a href="?sortCol=title&sortOrder=asc&q=<?php echo $q; ?>" class="btn btn-secondary">Title asc</a>
+           <a href="?sortCol=title&sortOrder=desc&q=<?php echo $q; ?>" class="btn btn-secondary">Title desc</a>
+           <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q; ?>" class="btn btn-secondary">Price asc</a>
+           <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q; ?>" class="btn btn-secondary">Price desc</a>
+        <div class="container px-4 px-lg-5 mt-5"> 
+            <?php  foreach( $result["aggregations"] as $agg  ) { ?>
+                <h3><?php echo $agg["key"]; ?></h3>
+                <p>
+                <?php foreach( $agg["values"]["buckets"] as $bucket ) { ?>
+                <div>
+                <a href="">
+                <?php echo $bucket["key"]; ?> (<?php echo $bucket["doc_count"]; ?>)
+                </a>
+                </div>
+                <?php }?>
+                </p>
+                            
                 <?php } ?>
-            </div>
-            <?php
-            $totalProducts = $dbContext->countSearchResults($q);
-            $totalPages = ceil($totalProducts / $pageSize);
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <?php 
+                foreach($result["data"] as $prod){
+                ProductCard($prod);
+            } ?>  
+        </div>
+        </div>
 
-            for ($i = 1; $i <= $totalPages; $i++) {
-                echo "<a class='btn btn-secondary' href='?q=" . urlencode($q) . "&sortCol=$sortCol&sortOrder=$sortOrder&page=$i'>$i</a>";
-            }
-            ?>
+
     </section>
     <!-- Footer-->
     <?php Footer(); ?>
@@ -92,9 +94,6 @@ $products = $dbContext->searchProducts($q, $sortCol, $sortOrder, $pageSize, $off
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
-
-
-
 
 </body>
 
