@@ -22,13 +22,6 @@ class SearchEngine{
     private $index_name;
 
 
-    // Nr 5
-    // private $accessKey = 'MHPD-epV-6ZygsphezEPxw';
-    // private $secretKey='sTcru3VjnlVs1fgDTY91hmT0otD8Cw';
-    // private $url = "http://localhost:8080";
-
-    // private $index_name = "products-5";
-
     private  $client;
 
     function __construct(){
@@ -151,11 +144,38 @@ class SearchEngine{
         }  
     }
 
+    function getSimilarProducts(string $documentId) {
+         $query = [
+        "query" => [
+            "more_like_this" => [
+                "fields" => ["title", "description"],
+                "like" => [
+                    ["_id" => $documentId]
+                ],
+                "min_term_freq" => 1
+            ]
+        ],
+        "size" => 3 // justera antalet liknande produkter
+    ];
+    try {
+        $response = $this->client->post("/api/index/v1/{$this->index_name}/_search",[
+            'json' => $query
+        ]);
+        $data = json_decode($response->getBody(), true);
+        if (empty($data['hits']['total']['value'])) {
+            return null;
+        }
+        $data["hits"]["hits"] = $this->convertSearchEngineArrayToProduct($data["hits"]["hits"]);
+        return $data["hits"]["hits"];
+        
+    }catch(RequestException $e) {
+            // Hantera eventuella fel här
+            echo $e->getMessage();
+            return null;
+        }
+    }
 
-    /*
-    array(4) { ["_index"]=> string(11) "products-12" ["_id"]=> string(20) "JevW55YBjv4AvNg2A_3B" ["_score"]=> float(1) ["_source"]=> array(9) { ["webid"]=> int(24) ["title"]=> string(18) "Sleek Cotton Clock" ["description"]=> string(127) "Fabric-covered clock with silent quartz movement. Minimalist design blends into any decor. Hidden stitching ensures durability." ["price"]=> int(10) ["categoryName"]=> int(5) ["stockLevel"]=> int(98) ["color"]=> string(5) "white" ["categoryid"]=> int(5) ["string_facet"]=> array(2) { [0]=> array(2) { ["facet_name"]=> string(5) "Color" ["facet_value"]=> string(5) "white" } [1]=> array(1) { ["facet_name"]=> string(8) "Category" } } } }
-    
-    */
+
 
     function convertSearchEngineArrayToProduct($searchengineResults){
         $newarray = [];
@@ -169,6 +189,7 @@ class SearchEngine{
             $prod->imgUrl = $hit["_source"]["imgUrl"] ?? "https://via.placeholder.com/150"; // Om ingen bild finns, använd en placeholder
             $prod->price = $hit["_source"]["price"];
             $prod->categoryName = $hit["_source"]["categoryName"];
+            // $prod->title . ' ' . $prod->imgUrl =$hit["_source"]["combinedsearchtext"] ?? '';
 
             array_push($newarray, $prod);
         }

@@ -9,7 +9,7 @@ function ProductCard($prod)
                 <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
             <?php } ?>
             <!-- Product image-->
-            <img class="card-img-top" src="<?php echo $prod->imgUrl; ?>" alt="..." />
+            <img class="card-img-top" src="<?php echo $prod->imgUrl; ?>" alt="Produktbild" />
             <!-- Product details-->
             <div class="card-body p-4">
                 <div class="text-center">

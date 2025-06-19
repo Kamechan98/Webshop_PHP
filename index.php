@@ -15,7 +15,10 @@ require_once('vendor/autoload.php');
 $dotenv = Dotenv\Dotenv::createImmutable(".");
 $dotenv->load();
 
+$logger = require_once ("Utils/Logging.php");
+$logger->info("Starting");
 
+try { 
 $router = new Router();
 $router->addRoute('/', function () {
     require __DIR__ . '/Pages/index.php';
@@ -69,6 +72,20 @@ $router->addRoute('/checkout', function () { // Betyder ta bort EN
 
 $router->addRoute('/checkoutsuccess', function () { // Betyder ta bort EN 
         require_once( __DIR__ .'/Pages/checkoutsuccess.php');
-});
+}); 
 
 $router->dispatch();
+}
+
+catch(Exception $ex){
+    $logger->error($ex->getTrace());
+}
+
+
+function exception_handler(Throwable $exception) {
+    global $logger;
+    $logger->error("exception",[$exception->getMessage()]);
+    $logger->error("exception",$exception->getTrace());
+}
+
+?>

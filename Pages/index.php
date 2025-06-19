@@ -17,6 +17,7 @@ $dbContext = new Database();
 $userId = null;
 $session_id = null;
 
+
 if ($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
     $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
 }
@@ -35,6 +36,16 @@ $cart = new Cart($dbContext, $session_id, $userId);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-33MXX941B5"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-33MXX941B5', {
+        debug_mode: true
+    });
+    </script>
     <title>Shop Homepage - Start Bootstrap Template</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -63,8 +74,6 @@ $cart = new Cart($dbContext, $session_id, $userId);
             </div>
         </div>
     </section>
-
-
 
 
     <!-- Footer-->

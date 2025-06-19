@@ -281,5 +281,13 @@ class Database
         }
     }
 
+    function getRecommendedProducts ($productId, $limit = 3)
+    {
+        $query = $this->pdo->prepare("Select * from products where id <> :productId order by rand() limit 3;");
+        $query->bindValue(':productId', $productId, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+    }
+
 }
 ?>

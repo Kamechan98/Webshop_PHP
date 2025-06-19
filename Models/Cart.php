@@ -68,15 +68,6 @@ class Cart
         }
     }
 
-// public function deleteCartItem($userId, $sessionId, $productId)
-// {
-//     // Gör detta enligt hur din databas fungerar — exempelkod:
-//     $query = "DELETE FROM cart_items WHERE product_id = ? AND (user_id = ? OR session_id = ?)";
-//     $stmt = $this->conn->prepare($query);
-//     $stmt->execute([$productId, $userId, $sessionId]);
-// }
-
-
     public function getCartItem($productId)
     {
         foreach ($this->cartItems as $item) {

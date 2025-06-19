@@ -1,8 +1,10 @@
 <?php
 // Inkludera nödvändiga filer
+require_once("Utils/SearchEngine.php");
 require_once("Models/Product.php");
 require_once("Models/Database.php");
 require_once("components/Footer.php");
+require_once("components/ProductCard.php");
 require_once("components/Nav.php");
 require_once("Models/Cart.php");
 
@@ -22,9 +24,13 @@ if (!isset($_GET['id'])) {
     echo "Ingen produkt angiven!";
     exit;
 }
-
 $productId = $_GET['id'];
 $product = $dbContext->getProductById($productId);
+
+$searchEngine = new SearchEngine();
+$docId = $searchEngine->getDocumentIdOrUndefined($product->id);
+$similarProducts = [];
+
 
 if (!$product) {
     echo "Produkten kunde inte hittas!";
@@ -40,6 +46,16 @@ if (!$product) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-33MXX941B5"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-33MXX941B5', {
+        debug_mode: true
+    });
+    </script>
     <title><?php echo $product->title; ?> - Produktdetaljer</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -69,7 +85,35 @@ if (!$product) {
             </div>
         </div>
     </section>
-
+    <section>
+        <div class="container px-4 px-lg-5 mt-5">
+            <h2 class="fw-bolder mb-4">Folk som köpt den här har även köpt:</h2>
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <?php
+                $recommended = $dbContext->getRecommendedProducts($productId);
+                foreach ($recommended as $prod) {
+                    echo ProductCard($prod);
+                }
+                ?>
+            </div>
+        </div>
+    </section>
+    <!-- Liknande produkter-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <h2 class="fw-bolder mb-4">Liknande produkter</h2>
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <?php
+                if ($docId) {
+                    $similarProducts = $searchEngine->getSimilarProducts($docId) ?? [];
+                }
+                foreach ($similarProducts as $prod) {
+                    ProductCard($prod);
+                }
+                ?>
+            </div>
+        </div>
+    </section>
     <!-- Footer-->
     <?php Footer(); ?>
 

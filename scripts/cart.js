@@ -7,7 +7,7 @@ function addToCart(productId, updateCartItemsTable=false,price=0,title="") {
     value: price,
     items: [
         {
-        item_id: productId,
+        item_id: productId.toString(),
         item_name:title,
         price: price,
         quantity: 1

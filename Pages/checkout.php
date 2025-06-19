@@ -1,6 +1,6 @@
 <?php
 
-use PgSql\Lob;
+// use PgSql\Lob;
 
 require_once("vendor/autoload.php");
 
